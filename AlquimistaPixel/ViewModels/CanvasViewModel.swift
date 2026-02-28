@@ -14,6 +14,11 @@ class CanvasViewModel: ObservableObject {
     private let recipeService = RecipeService()
     var onNewDiscovery: ((String, String, String) -> Void)?
 
+    private var shownFirstDiscoveries: Set<String> {
+        get { Set(UserDefaults.standard.stringArray(forKey: "shownFirstDiscoveries") ?? []) }
+        set { UserDefaults.standard.set(Array(newValue), forKey: "shownFirstDiscoveries") }
+    }
+
     private var userId: String {
         if let id = UserDefaults.standard.string(forKey: "userId") { return id }
         let id = UUID().uuidString
@@ -158,7 +163,11 @@ class CanvasViewModel: ObservableObject {
                     activeElements.append(new)
                     self.onNewDiscovery?(result.name, result.emoji, result.colorHex)
                     UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                    if result.isFirstDiscovery {
+                    let key = result.name.lowercased()
+                    if result.isFirstDiscovery && !self.shownFirstDiscoveries.contains(key) {
+                        var seen = self.shownFirstDiscoveries
+                        seen.insert(key)
+                        self.shownFirstDiscoveries = seen
                         self.firstDiscoveryName = result.name
                         Task {
                             try? await Task.sleep(for: .seconds(3))
