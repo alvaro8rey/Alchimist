@@ -164,6 +164,7 @@ class CanvasViewModel: ObservableObject {
         if trashRect.contains(CGPoint(x: screenX, y: screenY)) {
             deleteElement(id)
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            SoundManager.shared.playSwoosh()
         } else {
             checkCombinations(for: element)
         }
@@ -212,6 +213,7 @@ class CanvasViewModel: ObservableObject {
                     activeElements.append(new)
                     self.onNewDiscovery?(result.name, result.emoji, result.colorHex, result.creatorName)
                     UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    SoundManager.shared.playPop()
 
                     // Añadir al historial
                     let entry = CombinationEntry(
@@ -229,6 +231,7 @@ class CanvasViewModel: ObservableObject {
                         seen.insert(key)
                         self.shownFirstDiscoveries = seen
                         self.firstDiscoveryName = result.name
+                        SoundManager.shared.playChime()
                         Task {
                             try? await Task.sleep(for: .seconds(3))
                             await MainActor.run { self.firstDiscoveryName = nil }
