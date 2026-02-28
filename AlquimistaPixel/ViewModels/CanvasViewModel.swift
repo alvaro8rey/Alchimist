@@ -86,8 +86,16 @@ class CanvasViewModel: ObservableObject {
         highlightedElementID = (minDist < 65) ? closestID : nil
     }
 
-    func commitPinch(_ delta: CGFloat) {
-        scale = min(4.0, max(0.2, scale * delta))
+    func commitPinch(_ delta: CGFloat, screenSize: CGSize) {
+        let newScale = min(4.0, max(0.2, scale * delta))
+        let cx = screenSize.width / 2
+        let cy = screenSize.height / 2
+        // Ajusta el offset para que el punto bajo el centro de pantalla no se desplace
+        canvasOffset = CGSize(
+            width:  cx - (cx - canvasOffset.width)  * (newScale / scale),
+            height: cy - (cy - canvasOffset.height) * (newScale / scale)
+        )
+        scale = newScale
     }
     
     func handleElementDrop(id: UUID, screenSize: CGSize) {

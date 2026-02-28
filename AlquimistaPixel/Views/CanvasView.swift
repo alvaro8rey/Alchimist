@@ -20,7 +20,7 @@ struct CanvasView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                Color("#020617").ignoresSafeArea()
+                Color(red: 2/255, green: 6/255, blue: 23/255).ignoresSafeArea()
                 
                 InfiniteGridView(offset: currentOffset, scale: vm.scale)
                 
@@ -43,7 +43,7 @@ struct CanvasView: View {
                                     state = value
                                 }
                                 .onEnded { value in
-                                    vm.commitPinch(value)
+                                    vm.commitPinch(value, screenSize: geo.size)
                                 }
                         )
                     )
@@ -102,7 +102,10 @@ struct CanvasView: View {
                     }
                 }
             }
-            .onAppear { screenSize = geo.size }
+            .onAppear {
+                screenSize = geo.size
+                vm.resetCamera(screenSize: geo.size)
+            }
         }
         .ignoresSafeArea()
         .overlay(alignment: .top) { header }

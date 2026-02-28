@@ -21,7 +21,7 @@ struct ElementView: View {
                 RoundedRectangle(cornerRadius: 22)
                     .fill(.ultraThinMaterial)
                 RoundedRectangle(cornerRadius: 22)
-                    .fill(Color(hex: element.colorHex).opacity(0.35))
+                    .fill(Color.hex(element.colorHex).opacity(0.35))
             }
         }
         .overlay {
