@@ -11,6 +11,13 @@ class CanvasViewModel: ObservableObject {
     
     private let recipeService = RecipeService()
     var onNewDiscovery: ((String, String, String) -> Void)?
+
+    private var userId: String {
+        if let id = UserDefaults.standard.string(forKey: "userId") { return id }
+        let id = UUID().uuidString
+        UserDefaults.standard.set(id, forKey: "userId")
+        return id
+    }
     
     init(screenSize: CGSize = .zero) {
         spawnInitialElements()
@@ -75,8 +82,9 @@ class CanvasViewModel: ObservableObject {
             return
         }
         
-        let screenX = element.position.x * scale + canvasOffset.width
-        let screenY = element.position.y * scale + canvasOffset.height
+        // scaleEffect ancla en el centro de la pantalla, hay que compensar ese desplazamiento
+        let screenX = (element.position.x - screenSize.width / 2) * scale + screenSize.width / 2 + canvasOffset.width
+        let screenY = (element.position.y - screenSize.height / 2) * scale + screenSize.height / 2 + canvasOffset.height
         
         // Área de la papelera corregida
         let trashRect = CGRect(x: 0, y: screenSize.height - 230, width: 120, height: 120)
@@ -127,7 +135,7 @@ class CanvasViewModel: ObservableObject {
         activeElements.removeAll { $0.id == id1 || $0.id == id2 }
         
         Task {
-            if let result = await recipeService.getCombination(e1.name, e2.name) {
+            if let result = await recipeService.getCombination(e1.name, e2.name, userId: userId) {
                 await MainActor.run {
                     let new = ActiveElement(id: UUID(), name: result.name, emoji: result.emoji, colorHex: result.colorHex, position: mid)
                     activeElements.append(new)
