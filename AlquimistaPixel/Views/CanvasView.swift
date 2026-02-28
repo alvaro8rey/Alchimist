@@ -157,15 +157,14 @@ struct CanvasView: View {
 
     private var header: some View {
         HStack(alignment: .center) {
-            Button { showProfile = true } label: {
-                Text("Chromancy")
-                    .font(.system(size: 18, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
-            }
+            Text("Chromancy")
+                .font(.system(size: 18, weight: .black, design: .rounded))
+                .foregroundStyle(.white)
 
             Spacer()
 
             HStack(spacing: 8) {
+                zoomButton(icon: "person.circle") { showProfile = true }
                 if !vm.combinationHistory.isEmpty {
                     zoomButton(icon: "clock.arrow.circlepath") { showHistory = true }
                 }
