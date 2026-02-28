@@ -24,7 +24,7 @@ final class SoundManager {
         chimeBuffer  = SoundManager.makeChime()
         swooshBuffer = SoundManager.makeSwoosh()
 
-        let fmt = AVAudioFormat(standardFormatWithSampleRate: sr, channels: 1)!
+        let fmt = AVAudioFormat(standardFormatWithSampleRate: SoundManager.sr, channels: 1)!
         for node in [popNode, chimeNode, swooshNode] {
             engine.attach(node)
             engine.connect(node, to: engine.mainMixerNode, format: fmt)
