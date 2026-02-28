@@ -20,8 +20,7 @@ struct CanvasView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                // FONDO: Si da error 'hex:', asegúrate de haber creado el archivo Color+Hex.swift
-                Color(hex: "#020617").ignoresSafeArea()
+                Color("#020617").ignoresSafeArea()
                 
                 InfiniteGridView(offset: currentOffset, scale: vm.scale)
                 
