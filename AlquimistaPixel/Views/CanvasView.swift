@@ -51,6 +51,7 @@ struct CanvasView: View {
                             isDragging: vm.draggingElementID == element.id,
                             isHighlighted: vm.highlightedElementID == element.id
                         )
+                        .scaleEffect(vm.scale)
                         .position(
                             x: screenX(element.position.x, width: geo.size.width),
                             y: screenY(element.position.y, height: geo.size.height)
