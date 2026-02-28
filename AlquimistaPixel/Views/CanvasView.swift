@@ -4,12 +4,17 @@ struct CanvasView: View {
     @ObservedObject var vm: CanvasViewModel
     @Binding var screenSize: CGSize
     @GestureState private var dragTranslation: CGSize = .zero
-    
+    @GestureState private var activePinchScale: CGFloat = 1.0
+
     var currentOffset: CGSize {
         CGSize(
             width: vm.canvasOffset.width + dragTranslation.width,
             height: vm.canvasOffset.height + dragTranslation.height
         )
+    }
+
+    var effectiveScale: CGFloat {
+        min(4.0, max(0.2, vm.scale * activePinchScale))
     }
     
     var body: some View {
@@ -23,46 +28,59 @@ struct CanvasView: View {
                 Color.clear
                     .contentShape(Rectangle())
                     .gesture(
-                        DragGesture()
-                            .updating($dragTranslation) { value, state, _ in
-                                if vm.draggingElementID == nil { state = value.translation }
-                            }
-                            .onEnded { value in
-                                if vm.draggingElementID == nil {
-                                    vm.canvasOffset.width += value.translation.width
-                                    vm.canvasOffset.height += value.translation.height
+                        SimultaneousGesture(
+                            DragGesture()
+                                .updating($dragTranslation) { value, state, _ in
+                                    if vm.draggingElementID == nil { state = value.translation }
                                 }
-                            }
+                                .onEnded { value in
+                                    if vm.draggingElementID == nil {
+                                        vm.canvasOffset.width += value.translation.width
+                                        vm.canvasOffset.height += value.translation.height
+                                    }
+                                },
+                            MagnificationGesture()
+                                .updating($activePinchScale) { value, state, _ in
+                                    state = value
+                                }
+                                .onEnded { value in
+                                    vm.commitPinch(value)
+                                }
+                        )
                     )
                 
                 ZStack {
                     ForEach(vm.activeElements) { element in
-                        ElementView(element: element, isDragging: vm.draggingElementID == element.id)
-                            .position(x: element.position.x, y: element.position.y)
-                            .onTapGesture(count: 2) {
-                                vm.duplicateElement(element)
-                            }
-                            .gesture(
-                                DragGesture(coordinateSpace: .global)
-                                    .onChanged { value in
-                                        if vm.draggingElementID == nil {
-                                            vm.draggingElementID = element.id
-                                            vm.dragStartWorldPosition = element.position
-                                        }
-                                        if let start = vm.dragStartWorldPosition {
-                                            let dx = value.translation.width / vm.scale
-                                            let dy = value.translation.height / vm.scale
-                                            vm.updatePosition(for: element.id, to: CGPoint(x: start.x + dx, y: start.y + dy))
-                                        }
+                        ElementView(
+                            element: element,
+                            isDragging: vm.draggingElementID == element.id,
+                            isHighlighted: vm.highlightedElementID == element.id
+                        )
+                        .position(x: element.position.x, y: element.position.y)
+                        .onTapGesture(count: 2) {
+                            vm.duplicateElement(element)
+                        }
+                        .gesture(
+                            DragGesture(coordinateSpace: .global)
+                                .onChanged { value in
+                                    if vm.draggingElementID == nil {
+                                        vm.draggingElementID = element.id
+                                        vm.dragStartWorldPosition = element.position
                                     }
-                                    .onEnded { _ in
-                                        vm.handleElementDrop(id: element.id, screenSize: geo.size)
+                                    if let start = vm.dragStartWorldPosition {
+                                        let dx = value.translation.width / effectiveScale
+                                        let dy = value.translation.height / effectiveScale
+                                        vm.updatePosition(for: element.id, to: CGPoint(x: start.x + dx, y: start.y + dy))
                                     }
-                            )
-                            .zIndex(vm.draggingElementID == element.id ? 100 : 0)
+                                }
+                                .onEnded { _ in
+                                    vm.handleElementDrop(id: element.id, screenSize: geo.size)
+                                }
+                        )
+                        .zIndex(vm.draggingElementID == element.id ? 100 : 0)
                     }
                 }
-                .scaleEffect(vm.scale)
+                .scaleEffect(effectiveScale)
                 .offset(currentOffset)
                 
                 // PAPELERA

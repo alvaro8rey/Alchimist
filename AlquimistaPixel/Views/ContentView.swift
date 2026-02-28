@@ -12,19 +12,46 @@ struct ContentView: View {
         GeometryReader { geo in
             ZStack(alignment: .bottom) {
                 CanvasView(vm: vm, screenSize: $screenSize)
-                
+
                 InventoryView(
                     discoveredElements: discoveredElements,
                     onSpawn: { element in
                         let centerScreenX = screenSize.width / 2
                         let centerScreenY = screenSize.height / 2 - 80
-                        
+
                         let worldX = (centerScreenX - vm.canvasOffset.width) / vm.scale
                         let worldY = (centerScreenY - vm.canvasOffset.height) / vm.scale
-                        
+
                         vm.spawnElement(from: element, at: CGPoint(x: worldX, y: worldY))
                     }
                 )
+
+                // Toast de primer descubrimiento mundial
+                if let name = vm.firstDiscoveryName {
+                    VStack {
+                        Spacer()
+                        HStack(spacing: 10) {
+                            Text("🌟")
+                                .font(.title2)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("¡Primer descubrimiento mundial!")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.white.opacity(0.7))
+                                Text(name)
+                                    .font(.system(size: 16, weight: .black, design: .rounded))
+                                    .foregroundStyle(.white)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 14)
+                        .background(.ultraThinMaterial)
+                        .clipShape(Capsule())
+                        .shadow(color: .white.opacity(0.15), radius: 20)
+                        .padding(.bottom, 110)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+                    .animation(.spring(response: 0.4, dampingFraction: 0.75), value: vm.firstDiscoveryName)
+                }
             }
             .onAppear {
                 screenSize = geo.size

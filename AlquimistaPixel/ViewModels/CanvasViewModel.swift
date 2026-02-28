@@ -8,6 +8,8 @@ class CanvasViewModel: ObservableObject {
     @Published var draggingElementID: UUID? = nil
     @Published var showTrashBin: Bool = false
     @Published var dragStartWorldPosition: CGPoint? = nil
+    @Published var highlightedElementID: UUID? = nil
+    @Published var firstDiscoveryName: String? = nil
     
     private let recipeService = RecipeService()
     var onNewDiscovery: ((String, String, String) -> Void)?
@@ -74,6 +76,18 @@ class CanvasViewModel: ObservableObject {
         if let i = activeElements.firstIndex(where: { $0.id == id }) {
             activeElements[i].position = newPos
         }
+        // Resaltar el elemento más cercano si está dentro del rango de combinación
+        var minDist: CGFloat = .infinity
+        var closestID: UUID? = nil
+        for other in activeElements where other.id != id {
+            let d = hypot(newPos.x - other.position.x, newPos.y - other.position.y)
+            if d < minDist { minDist = d; closestID = other.id }
+        }
+        highlightedElementID = (minDist < 65) ? closestID : nil
+    }
+
+    func commitPinch(_ delta: CGFloat) {
+        scale = min(4.0, max(0.2, scale * delta))
     }
     
     func handleElementDrop(id: UUID, screenSize: CGSize) {
@@ -104,6 +118,7 @@ class CanvasViewModel: ObservableObject {
             showTrashBin = false
             draggingElementID = nil
             dragStartWorldPosition = nil
+            highlightedElementID = nil
         }
     }
     
@@ -141,6 +156,13 @@ class CanvasViewModel: ObservableObject {
                     activeElements.append(new)
                     self.onNewDiscovery?(result.name, result.emoji, result.colorHex)
                     UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    if result.isFirstDiscovery {
+                        self.firstDiscoveryName = result.name
+                        Task {
+                            try? await Task.sleep(for: .seconds(3))
+                            await MainActor.run { self.firstDiscoveryName = nil }
+                        }
+                    }
                 }
             } else {
                 await MainActor.run {
