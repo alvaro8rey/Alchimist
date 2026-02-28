@@ -174,18 +174,41 @@ struct CanvasView: View {
             Spacer()
 
             HStack(spacing: 6) {
-                zoomButton(icon: "person.circle") { showProfile = true }
-                zoomButton(icon: "trophy") { showLeaderboard = true }
-                zoomButton(icon: "globe") { showFeed = true }
-                if !vm.combinationHistory.isEmpty {
-                    zoomButton(icon: "clock.arrow.circlepath") { showHistory = true }
-                }
-                if !vm.activeElements.isEmpty {
-                    zoomButton(icon: "trash") { showClearAlert = true }
-                }
+                // Zoom controls
                 zoomButton(icon: "minus", action: vm.zoomOut)
                 zoomButton(icon: "plus", action: vm.zoomIn)
-                zoomButton(icon: "scope", action: { vm.resetCamera(screenSize: screenSize) })
+                zoomButton(icon: "scope") { vm.resetCamera(screenSize: screenSize) }
+
+                // Menú con el resto de acciones
+                Menu {
+                    Button { showProfile = true } label: {
+                        Label("Perfil", systemImage: "person.circle")
+                    }
+                    Button { showLeaderboard = true } label: {
+                        Label("Ranking global", systemImage: "trophy")
+                    }
+                    Button { showFeed = true } label: {
+                        Label("Descubrimientos", systemImage: "globe")
+                    }
+                    if !vm.combinationHistory.isEmpty {
+                        Button { showHistory = true } label: {
+                            Label("Historial", systemImage: "clock.arrow.circlepath")
+                        }
+                    }
+                    if !vm.activeElements.isEmpty {
+                        Divider()
+                        Button(role: .destructive) { showClearAlert = true } label: {
+                            Label("Limpiar canvas", systemImage: "trash")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 32, height: 32)
+                        .background(.white.opacity(0.1))
+                        .clipShape(Circle())
+                }
             }
         }
         .padding(.horizontal, 16)
