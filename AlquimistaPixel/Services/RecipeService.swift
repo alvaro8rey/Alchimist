@@ -76,6 +76,14 @@ struct RecipeService {
                 "createdAt": FieldValue.serverTimestamp()
             ])
             print("🚀 ¡ERES EL PRIMERO! Nuevo descubrimiento guardado: \(aiResult.name)")
+
+            // Incrementar contador de primicias del usuario
+            if !userId.isEmpty {
+                try? await db.collection("users").document(userId).setData(
+                    ["discoveryCount": FieldValue.increment(Int64(1))],
+                    merge: true
+                )
+            }
         } catch {
             print("❌ Error al guardar en Firebase: \(error.localizedDescription)")
         }

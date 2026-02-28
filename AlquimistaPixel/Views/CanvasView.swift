@@ -7,6 +7,8 @@ struct CanvasView: View {
     @State private var showHistory = false
     @State private var showClearAlert = false
     @State private var showProfile = false
+    @State private var showLeaderboard = false
+    @State private var showFeed = false
 
     var currentOffset: CGSize {
         CGSize(
@@ -147,6 +149,14 @@ struct CanvasView: View {
             ProfileView()
                 .preferredColorScheme(.dark)
         }
+        .sheet(isPresented: $showLeaderboard) {
+            LeaderboardView()
+                .preferredColorScheme(.dark)
+        }
+        .sheet(isPresented: $showFeed) {
+            GlobalFeedView()
+                .preferredColorScheme(.dark)
+        }
         .alert("Limpiar canvas", isPresented: $showClearAlert) {
             Button("Cancelar", role: .cancel) {}
             Button("Limpiar", role: .destructive) { vm.clearCanvas() }
@@ -163,8 +173,10 @@ struct CanvasView: View {
 
             Spacer()
 
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 zoomButton(icon: "person.circle") { showProfile = true }
+                zoomButton(icon: "trophy") { showLeaderboard = true }
+                zoomButton(icon: "globe") { showFeed = true }
                 if !vm.combinationHistory.isEmpty {
                     zoomButton(icon: "clock.arrow.circlepath") { showHistory = true }
                 }
