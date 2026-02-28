@@ -128,7 +128,7 @@ class CanvasViewModel: ObservableObject {
         var closest: ActiveElement?
         var minDist: CGFloat = .infinity
         
-        for other in activeElements where other.id != element.id {
+        for other in activeElements where other.id != element.id && other.name.lowercased() != element.name.lowercased() {
             let d = hypot(element.position.x - other.position.x, element.position.y - other.position.y)
             if d < minDist {
                 minDist = d

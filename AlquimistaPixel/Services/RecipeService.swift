@@ -94,30 +94,29 @@ struct RecipeService {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
             let prompt = """
-            Eres el motor del juego Infinite Craft. Combinas dos elementos para crear algo nuevo usando lógica creativa.
+            Eres el motor del juego Infinite Craft. Combinas dos elementos y produces un concepto NUEVO e INESPERADO.
 
-            CÓMO RAZONAR (ejemplos reales del juego):
-            Fuego + Agua = Vapor | Tierra + Fuego = Lava | Agua + Agua = Océano | Fuego + Fuego = Volcán
-            Humano + Fuego = Cocinero | Tierra + Vida = Planta | Agua + Tierra = Barro | Viento + Fuego = Humo
-            Humano + Humano = Familia | Ciencia + Humano = Einstein | Héroe + Ciudad = Batman
-            Guerrero + Norte = Vikingo | Mago + Fuego = Gandalf | Robot + Inteligencia = IA
+            EJEMPLOS DE BUENAS COMBINACIONES (el resultado sorprende, no es obvio):
+            Fuego + Agua = Vapor | Tierra + Fuego = Lava | Humano + Fuego = Cocinero
+            Tormenta + Ecosistema = Huracán | Furia + Naturaleza = Volcán | Tormenta + Tormenta = Tifón
+            Guerrero + Norte = Vikingo | Mago + Fuego = Gandalf | Ciencia + Humano = Einstein
+            Héroe + Ciudad = Batman | Robot + Inteligencia = IA | Océano + Vida = Sirena
 
-            TIPOS DE RESULTADOS (sé ambicioso y creativo):
-            - Elementos: Lava, Vapor, Tormenta, Hielo, Electricidad
-            - Criaturas: Dragón, Fénix, Sirena, Unicornio, Zombie
-            - Personas reales: Einstein, Darwin, Tesla, Cleopatra, Da Vinci, Napoleon
-            - Personajes ficticios: Batman, Goku, Sherlock, Gandalf, Spiderman
-            - Marcas/Empresas: Tesla, Apple, Netflix, Google, McDonald's, NASA
-            - Lugares: Roma, Sahara, Olimpo, Atlantis, Silicon Valley
-            - Comidas: Pizza, Sushi, Curry, Chocolate, Ramen
-            - Conceptos: Democracia, Internet, Magia, Guerra, Arte, Amor
-            - Tecnología: Cohete, Ordenador, Nuclear, Satélite
+            TIPOS DE RESULTADOS (sé ambicioso):
+            - Elementos: Lava, Vapor, Tifón, Huracán, Plasma, Aurora
+            - Criaturas: Dragón, Fénix, Sirena, Unicornio, Leviatán
+            - Personas reales: Einstein, Darwin, Tesla, Cleopatra, Napoleón
+            - Personajes ficticios: Batman, Goku, Gandalf, Poseidón, Thor
+            - Lugares: Roma, Olimpo, Atlantis, Sahara, Pompeya
+            - Conceptos: Caos, Karma, Entropía, Apocalipsis, Renacimiento
+            - Tecnología: Cohete, Nuclear, Satélite, Láser
 
-            REGLAS:
-            1. Máximo 2 palabras en el nombre, sin artículos ni preposiciones (sin "de","el","la","un")
-            2. Si la combinación es absurda, crea algo poético o filosófico
-            3. El emoji representa visualmente el resultado
-            4. El colorHex (#RRGGBB) evoca el color principal del resultado
+            REGLAS CRÍTICAS:
+            1. PROHIBIDO usar palabras de los elementos de entrada en el resultado (ni variantes, ni sinónimos directos)
+            2. El resultado debe ser un concepto DIFERENTE a ambos inputs, no una mezcla literal
+            3. Máximo 2 palabras, sin artículos ni preposiciones
+            4. El emoji representa visualmente el resultado
+            5. El colorHex (#RRGGBB) evoca el color del resultado
 
             Elementos: "\(item1)" + "\(item2)"
             JSON: {"name":"...","emoji":"...","colorHex":"#..."}
@@ -129,7 +128,7 @@ struct RecipeService {
                     ["role": "system", "content": "Solo devuelves conceptos transformados en JSON."],
                     ["role": "user", "content": prompt]
                 ],
-                "temperature": 0.3,
+                "temperature": 0.8,
                 "response_format": ["type": "json_object"]
             ]
 
