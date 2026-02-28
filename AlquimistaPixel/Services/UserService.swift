@@ -13,6 +13,20 @@ struct UserService {
         !username.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
+    func isUsernameTaken(_ name: String) async -> Bool {
+        let trimmed = name.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return false }
+        do {
+            let snapshot = try await db.collection("users")
+                .whereField("username", isEqualTo: trimmed)
+                .limit(to: 1)
+                .getDocuments()
+            return !snapshot.documents.isEmpty
+        } catch {
+            return false // Si no se puede comprobar, dejamos pasar
+        }
+    }
+
     func save(username: String) async {
         let name = username.trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty else { return }
