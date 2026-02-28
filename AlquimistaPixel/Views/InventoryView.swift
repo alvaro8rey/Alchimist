@@ -205,29 +205,31 @@ struct InventorySheetView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                if elements.isEmpty {
-                    VStack(spacing: 10) {
-                        Text("Sin resultados")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.5))
-                        Text("Prueba con otra búsqueda")
-                            .font(.system(size: 13))
-                            .foregroundStyle(.white.opacity(0.3))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 60)
-                } else {
-                    LazyVGrid(columns: columns, spacing: 12) {
-                        ForEach(elements) { element in
-                            InventoryGridCell(
-                                element: element,
-                                count: canvasCounts[element.name] ?? 0,
-                                isFlashing: flashingName == element.name,
-                                onTap: {
-                                    onSpawn(element)
-                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                }
-                            )
+                Group {
+                    if elements.isEmpty {
+                        VStack(spacing: 10) {
+                            Text("Sin resultados")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.5))
+                            Text("Prueba con otra búsqueda")
+                                .font(.system(size: 13))
+                                .foregroundStyle(.white.opacity(0.3))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
+                    } else {
+                        LazyVGrid(columns: columns, spacing: 12) {
+                            ForEach(elements) { element in
+                                InventoryGridCell(
+                                    element: element,
+                                    count: canvasCounts[element.name] ?? 0,
+                                    isFlashing: flashingName == element.name,
+                                    onTap: {
+                                        onSpawn(element)
+                                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                    }
+                                )
+                            }
                         }
                     }
                 }
