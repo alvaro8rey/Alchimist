@@ -143,7 +143,12 @@ struct CanvasView: View {
             }
         }
         .ignoresSafeArea()
-        .overlay(alignment: .top) { header }
+        .overlay(alignment: .top) {
+            GeometryReader { proxy in
+                header(safeTop: proxy.safeAreaInsets.top)
+            }
+            .ignoresSafeArea()
+        }
         .sheet(item: $activeSheet) { sheet in
             Group {
                 switch sheet {
@@ -163,7 +168,7 @@ struct CanvasView: View {
         }
     }
 
-    private var header: some View {
+    private func header(safeTop: CGFloat) -> some View {
         HStack(alignment: .center) {
             Text("Chromancy")
                 .font(.system(size: 18, weight: .black, design: .rounded))
@@ -220,7 +225,7 @@ struct CanvasView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.top, 50)
+        .padding(.top, safeTop + 6)
         .padding(.bottom, 10)
         .background(LinearGradient(colors: [.black.opacity(0.8), .clear], startPoint: .top, endPoint: .bottom))
     }
