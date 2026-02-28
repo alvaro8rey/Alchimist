@@ -200,6 +200,7 @@ struct InventorySheetView: View {
     let onSpawn: (DiscoveredElement) -> Void
     let onClose: () -> Void
 
+    @State private var selectedElement: DiscoveredElement? = nil
     private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
 
     var body: some View {
@@ -224,10 +225,8 @@ struct InventorySheetView: View {
                                     element: element,
                                     count: canvasCounts[element.name] ?? 0,
                                     isFlashing: flashingName == element.name,
-                                    onTap: {
-                                        onSpawn(element)
-                                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                    }
+                                    onTap: { onSpawn(element) },
+                                    onLongPress: { selectedElement = element }
                                 )
                             }
                         }
@@ -247,6 +246,10 @@ struct InventorySheetView: View {
                 }
             }
         }
+        .sheet(item: $selectedElement) { element in
+            ElementDetailView(element: element)
+                .preferredColorScheme(.dark)
+        }
     }
 }
 
@@ -257,82 +260,89 @@ struct InventoryGridCell: View {
     let count: Int
     let isFlashing: Bool
     let onTap: () -> Void
+    let onLongPress: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
-            VStack(spacing: 0) {
-                // Zona emoji con badge
-                ZStack(alignment: .topTrailing) {
-                    Text(element.emoji)
-                        .font(.system(size: 44))
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 16)
-                        .padding(.bottom, 8)
-                        .scaleEffect(isFlashing ? 1.12 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5), value: isFlashing)
+        VStack(spacing: 0) {
+            // Zona emoji con badge
+            ZStack(alignment: .topTrailing) {
+                Text(element.emoji)
+                    .font(.system(size: 44))
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 16)
+                    .padding(.bottom, 8)
+                    .scaleEffect(isFlashing ? 1.12 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.5), value: isFlashing)
 
-                    // Badge "X en plano"
-                    if count > 0 {
-                        HStack(spacing: 4) {
-                            Circle()
-                                .fill(Color.hex(element.colorHex))
-                                .frame(width: 6, height: 6)
-                            Text(count == 1 ? "1 en plano" : "\(count) en plano")
-                                .font(.system(size: 9, weight: .bold))
-                                .foregroundStyle(.white)
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(.black.opacity(0.45))
-                        .clipShape(Capsule())
-                        .padding(.top, 8)
-                        .padding(.trailing, 8)
+                // Badge "X en plano"
+                if count > 0 {
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(Color.hex(element.colorHex))
+                            .frame(width: 6, height: 6)
+                        Text(count == 1 ? "1 en plano" : "\(count) en plano")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundStyle(.white)
                     }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(.black.opacity(0.45))
+                    .clipShape(Capsule())
+                    .padding(.top, 8)
+                    .padding(.trailing, 8)
                 }
+            }
 
-                // Nombre
-                Text(element.name)
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                    .padding(.horizontal, 10)
-                    .padding(.bottom, 14)
-            }
-            .frame(maxWidth: .infinity)
-            .background {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.ultraThinMaterial)
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color.hex(element.colorHex).opacity(isFlashing ? 0.5 : 0.28),
-                                    Color.hex(element.colorHex).opacity(isFlashing ? 0.18 : 0.06)
-                                ],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                }
-            }
-            .overlay {
+            // Nombre
+            Text(element.name)
+                .font(.system(size: 13, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+                .padding(.horizontal, 10)
+                .padding(.bottom, 14)
+        }
+        .frame(maxWidth: .infinity)
+        .background {
+            ZStack {
                 RoundedRectangle(cornerRadius: 20)
-                    .strokeBorder(
-                        isFlashing
-                            ? Color.white.opacity(0.85)
-                            : Color.hex(element.colorHex).opacity(0.35),
-                        lineWidth: isFlashing ? 1.5 : 1
+                    .fill(.ultraThinMaterial)
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.hex(element.colorHex).opacity(isFlashing ? 0.5 : 0.28),
+                                Color.hex(element.colorHex).opacity(isFlashing ? 0.18 : 0.06)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
                     )
             }
-            .shadow(
-                color: isFlashing ? Color.hex(element.colorHex).opacity(0.6) : .clear,
-                radius: 16
-            )
-            .scaleEffect(isFlashing ? 1.04 : 1.0)
-            .animation(.spring(response: 0.35, dampingFraction: 0.55), value: isFlashing)
         }
-        .buttonStyle(.plain)
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .strokeBorder(
+                    isFlashing
+                        ? Color.white.opacity(0.85)
+                        : Color.hex(element.colorHex).opacity(0.35),
+                    lineWidth: isFlashing ? 1.5 : 1
+                )
+        }
+        .shadow(
+            color: isFlashing ? Color.hex(element.colorHex).opacity(0.6) : .clear,
+            radius: 16
+        )
+        .scaleEffect(isFlashing ? 1.04 : 1.0)
+        .animation(.spring(response: 0.35, dampingFraction: 0.55), value: isFlashing)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            onTap()
+        }
+        .onLongPressGesture(minimumDuration: 0.4) {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            onLongPress()
+        }
     }
 }

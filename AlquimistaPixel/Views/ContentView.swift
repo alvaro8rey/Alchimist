@@ -63,13 +63,14 @@ struct ContentView: View {
                 ensureBasicElements()
                 
                 // ESCUCHADOR DE DESCUBRIMIENTOS
-                vm.onNewDiscovery = { name, emoji, hex in
+                vm.onNewDiscovery = { name, emoji, hex, creatorName in
                     // Comprobación insensible a mayúsculas
                     let exists = discoveredElements.contains { $0.name.lowercased() == name.lowercased() }
-                    
+
                     if !exists {
                         print("Nuevo descubrimiento detectado: \(name). Guardando en inventario...")
                         let new = DiscoveredElement(name: name, emoji: emoji, colorHex: hex)
+                        new.creatorName = creatorName
                         modelContext.insert(new)
                         lastAddedElementName = name
                         Task {

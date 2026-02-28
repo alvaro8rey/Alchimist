@@ -8,7 +8,8 @@ final class DiscoveredElement {
     var emoji: String
     var colorHex: String
     var discoveryDate: Date
-    
+    var creatorName: String = ""
+
     init(name: String, emoji: String, colorHex: String) {
         self.name = name
         self.emoji = emoji

@@ -6,6 +6,7 @@ struct CanvasView: View {
     @GestureState private var dragTranslation: CGSize = .zero
     @State private var showHistory = false
     @State private var showClearAlert = false
+    @State private var showProfile = false
 
     var currentOffset: CGSize {
         CGSize(
@@ -142,6 +143,10 @@ struct CanvasView: View {
             CombinationHistoryView(history: vm.combinationHistory)
                 .preferredColorScheme(.dark)
         }
+        .sheet(isPresented: $showProfile) {
+            ProfileView()
+                .preferredColorScheme(.dark)
+        }
         .alert("Limpiar canvas", isPresented: $showClearAlert) {
             Button("Cancelar", role: .cancel) {}
             Button("Limpiar", role: .destructive) { vm.clearCanvas() }
@@ -152,9 +157,11 @@ struct CanvasView: View {
 
     private var header: some View {
         HStack(alignment: .center) {
-            Text("Chromancy")
-                .font(.system(size: 18, weight: .black, design: .rounded))
-                .foregroundStyle(.white)
+            Button { showProfile = true } label: {
+                Text("Chromancy")
+                    .font(.system(size: 18, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+            }
 
             Spacer()
 

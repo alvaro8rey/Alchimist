@@ -3,6 +3,7 @@ import FirebaseFirestore
 
 struct UserService {
     static let usernameKey = "username"
+    private static let joinedAtKey = "joinedAt"
     private let db = Firestore.firestore()
 
     var username: String {
@@ -11,6 +12,10 @@ struct UserService {
 
     var hasUsername: Bool {
         !username.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    var joinedAt: Date? {
+        UserDefaults.standard.object(forKey: Self.joinedAtKey) as? Date
     }
 
     func isUsernameTaken(_ name: String) async -> Bool {
@@ -31,6 +36,9 @@ struct UserService {
         let name = username.trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty else { return }
         UserDefaults.standard.set(name, forKey: Self.usernameKey)
+        if UserDefaults.standard.object(forKey: Self.joinedAtKey) == nil {
+            UserDefaults.standard.set(Date(), forKey: Self.joinedAtKey)
+        }
         let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
         guard !userId.isEmpty else { return }
         try? await db.collection("users").document(userId).setData([

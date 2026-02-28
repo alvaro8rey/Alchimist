@@ -26,7 +26,7 @@ class CanvasViewModel: ObservableObject {
     @Published var combinationHistory: [CombinationEntry] = []
 
     private let recipeService = RecipeService()
-    var onNewDiscovery: ((String, String, String) -> Void)?
+    var onNewDiscovery: ((String, String, String, String) -> Void)?
     private var cancellables = Set<AnyCancellable>()
 
     private var shownFirstDiscoveries: Set<String> {
@@ -210,7 +210,7 @@ class CanvasViewModel: ObservableObject {
                     self.combiningPosition = nil
                     let new = ActiveElement(id: UUID(), name: result.name, emoji: result.emoji, colorHex: result.colorHex, position: mid)
                     activeElements.append(new)
-                    self.onNewDiscovery?(result.name, result.emoji, result.colorHex)
+                    self.onNewDiscovery?(result.name, result.emoji, result.colorHex, result.creatorName)
                     UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
 
                     // Añadir al historial
