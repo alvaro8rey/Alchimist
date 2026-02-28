@@ -1,14 +1,16 @@
 import SwiftUI
 
+private enum CanvasSheet: Identifiable {
+    case profile, leaderboard, feed, history
+    var id: Self { self }
+}
+
 struct CanvasView: View {
     @ObservedObject var vm: CanvasViewModel
     @Binding var screenSize: CGSize
     @GestureState private var dragTranslation: CGSize = .zero
-    @State private var showHistory = false
+    @State private var activeSheet: CanvasSheet? = nil
     @State private var showClearAlert = false
-    @State private var showProfile = false
-    @State private var showLeaderboard = false
-    @State private var showFeed = false
     @AppStorage("soundEnabled") private var soundEnabled = true
 
     var currentOffset: CGSize {
@@ -142,21 +144,16 @@ struct CanvasView: View {
         }
         .ignoresSafeArea()
         .overlay(alignment: .top) { header }
-        .sheet(isPresented: $showHistory) {
-            CombinationHistoryView(history: vm.combinationHistory)
-                .preferredColorScheme(.dark)
-        }
-        .sheet(isPresented: $showProfile) {
-            ProfileView()
-                .preferredColorScheme(.dark)
-        }
-        .sheet(isPresented: $showLeaderboard) {
-            LeaderboardView()
-                .preferredColorScheme(.dark)
-        }
-        .sheet(isPresented: $showFeed) {
-            GlobalFeedView()
-                .preferredColorScheme(.dark)
+        .sheet(item: $activeSheet) { sheet in
+            Group {
+                switch sheet {
+                case .profile:    ProfileView()
+                case .leaderboard: LeaderboardView()
+                case .feed:       GlobalFeedView()
+                case .history:    CombinationHistoryView(history: vm.combinationHistory)
+                }
+            }
+            .preferredColorScheme(.dark)
         }
         .alert("Limpiar canvas", isPresented: $showClearAlert) {
             Button("Cancelar", role: .cancel) {}
@@ -182,17 +179,17 @@ struct CanvasView: View {
 
                 // Menú con el resto de acciones
                 Menu {
-                    Button { showProfile = true } label: {
+                    Button { activeSheet = .profile } label: {
                         Label("Perfil", systemImage: "person.circle")
                     }
-                    Button { showLeaderboard = true } label: {
+                    Button { activeSheet = .leaderboard } label: {
                         Label("Ranking global", systemImage: "trophy")
                     }
-                    Button { showFeed = true } label: {
+                    Button { activeSheet = .feed } label: {
                         Label("Descubrimientos", systemImage: "globe")
                     }
                     if !vm.combinationHistory.isEmpty {
-                        Button { showHistory = true } label: {
+                        Button { activeSheet = .history } label: {
                             Label("Historial", systemImage: "clock.arrow.circlepath")
                         }
                     }
