@@ -7,6 +7,7 @@ struct ContentView: View {
     
     @StateObject private var vm = CanvasViewModel()
     @State private var screenSize: CGSize = .zero
+    @State private var lastAddedElementName: String? = nil
     
     var body: some View {
         GeometryReader { geo in
@@ -15,6 +16,8 @@ struct ContentView: View {
 
                 InventoryView(
                     discoveredElements: discoveredElements,
+                    activeElements: vm.activeElements,
+                    newlyAddedName: lastAddedElementName,
                     onSpawn: { element in
                         let centerScreenX = screenSize.width / 2
                         let centerScreenY = screenSize.height / 2 - 80
@@ -67,7 +70,8 @@ struct ContentView: View {
                         print("Nuevo descubrimiento detectado: \(name). Guardando en inventario...")
                         let new = DiscoveredElement(name: name, emoji: emoji, colorHex: hex)
                         modelContext.insert(new)
-                        
+                        lastAddedElementName = name
+
                         do {
                             try modelContext.save()
                         } catch {
