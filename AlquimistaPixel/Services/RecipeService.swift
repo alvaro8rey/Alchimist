@@ -94,14 +94,33 @@ struct RecipeService {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
             let prompt = """
-            Eres el motor de lógica de 'Infinite Craft'. Tu misión es fusionar conceptos para crear uno nuevo.
+            Eres el motor del juego Infinite Craft. Combinas dos elementos para crear algo nuevo usando lógica creativa.
 
-            REGLAS ESTRICTAS:
-            1. PROHIBIDO nombres compuestos con "de", "con" o "y".
-            2. El resultado debe ser un SUSTANTIVO ÚNICO (Ej: Coche + Electricidad = Tesla).
-            3. Responde SOLO JSON: {"name": "Nombre", "emoji": "emoji", "colorHex": "#HEX"}
+            CÓMO RAZONAR (ejemplos reales del juego):
+            Fuego + Agua = Vapor | Tierra + Fuego = Lava | Agua + Agua = Océano | Fuego + Fuego = Volcán
+            Humano + Fuego = Cocinero | Tierra + Vida = Planta | Agua + Tierra = Barro | Viento + Fuego = Humo
+            Humano + Humano = Familia | Ciencia + Humano = Einstein | Héroe + Ciudad = Batman
+            Guerrero + Norte = Vikingo | Mago + Fuego = Gandalf | Robot + Inteligencia = IA
 
-            Combinación: '\(item1)' + '\(item2)'
+            TIPOS DE RESULTADOS (sé ambicioso y creativo):
+            - Elementos: Lava, Vapor, Tormenta, Hielo, Electricidad
+            - Criaturas: Dragón, Fénix, Sirena, Unicornio, Zombie
+            - Personas reales: Einstein, Darwin, Tesla, Cleopatra, Da Vinci, Napoleon
+            - Personajes ficticios: Batman, Goku, Sherlock, Gandalf, Spiderman
+            - Marcas/Empresas: Tesla, Apple, Netflix, Google, McDonald's, NASA
+            - Lugares: Roma, Sahara, Olimpo, Atlantis, Silicon Valley
+            - Comidas: Pizza, Sushi, Curry, Chocolate, Ramen
+            - Conceptos: Democracia, Internet, Magia, Guerra, Arte, Amor
+            - Tecnología: Cohete, Ordenador, Nuclear, Satélite
+
+            REGLAS:
+            1. Máximo 2 palabras en el nombre, sin artículos ni preposiciones (sin "de","el","la","un")
+            2. Si la combinación es absurda, crea algo poético o filosófico
+            3. El emoji representa visualmente el resultado
+            4. El colorHex (#RRGGBB) evoca el color principal del resultado
+
+            Elementos: "\(item1)" + "\(item2)"
+            JSON: {"name":"...","emoji":"...","colorHex":"#..."}
             """
 
             let body: [String: Any] = [

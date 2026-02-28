@@ -92,19 +92,6 @@ class CanvasViewModel: ObservableObject {
         highlightedElementID = (minDist < 65) ? closestID : nil
     }
 
-    func commitPinch(_ delta: CGFloat, screenSize: CGSize) {
-        let newScale = min(4.0, max(0.2, scale * delta))
-        let ratio = newScale / scale
-        // El ZStack ya está centrado en pantalla por SwiftUI, así que el offset
-        // solo desplaza desde ese centro. Para mantener el punto bajo el centro
-        // fijo durante el zoom, basta con escalar el offset por el mismo ratio.
-        canvasOffset = CGSize(
-            width:  canvasOffset.width  * ratio,
-            height: canvasOffset.height * ratio
-        )
-        scale = newScale
-    }
-    
     func handleElementDrop(id: UUID, screenSize: CGSize) {
         guard let element = activeElements.first(where: { $0.id == id }) else {
             resetDragState()
