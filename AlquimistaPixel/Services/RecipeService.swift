@@ -39,14 +39,11 @@ struct RecipeService {
             
             if document.exists, let data = document.data() {
                 print("✅ Receta encontrada en Firebase!")
-                let creatorID = data["createdBy"] as? String ?? ""
-                
                 return CombinationResult(
                     name: data["name"] as? String ?? "",
                     emoji: data["emoji"] as? String ?? "",
                     colorHex: data["color"] as? String ?? "#FFFFFF",
-                    // Si el ID del creador coincide con el tuyo, fue tu primer descubrimiento
-                    isFirstDiscovery: creatorID == userId
+                    isFirstDiscovery: false
                 )
             }
         } catch {
