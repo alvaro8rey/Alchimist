@@ -144,10 +144,7 @@ struct CanvasView: View {
         }
         .ignoresSafeArea()
         .overlay(alignment: .top) {
-            GeometryReader { proxy in
-                header(safeTop: proxy.safeAreaInsets.top)
-            }
-            .ignoresSafeArea()
+            header(safeTop: topSafeArea)
         }
         .sheet(item: $activeSheet) { sheet in
             Group {
@@ -166,6 +163,14 @@ struct CanvasView: View {
         } message: {
             Text("Se eliminarán todos los elementos del canvas. Tu inventario no cambiará.")
         }
+    }
+
+    private var topSafeArea: CGFloat {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first(where: \.isKeyWindow)?
+            .safeAreaInsets.top ?? 59
     }
 
     private func header(safeTop: CGFloat) -> some View {
