@@ -56,7 +56,7 @@ struct InventoryView: View {
                                             .fill(.ultraThinMaterial)
                                         // APLICAMOS EL COLOR HEX AQUÍ
                                         RoundedRectangle(cornerRadius: 16)
-                                            .fill(Color(element.colorHex).opacity(0.3))
+                                            .fill(Color(hex: element.colorHex).opacity(0.3))
                                     }
                                 }
                                 .overlay {
@@ -103,7 +103,7 @@ struct InventoryView: View {
                             HStack(spacing: 16) {
                                 ZStack {
                                     Circle()
-                                        .fill(Color(element.colorHex).opacity(0.2))
+                                        .fill(Color(hex: element.colorHex).opacity(0.2))
                                         .frame(width: 44, height: 44)
                                     Text(element.emoji)
                                         .font(.title3)

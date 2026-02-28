@@ -79,24 +79,31 @@ struct RecipeService {
         return aiResult
     }
 
+    // Struct auxiliar para decodificar solo los campos que devuelve OpenAI
+    private struct AIResult: Codable {
+        let name: String
+        let emoji: String
+        let colorHex: String
+    }
+
     private func fetchFromOpenAI(item1: String, item2: String) async -> CombinationResult? {
             let url = URL(string: "https://api.openai.com/v1/chat/completions")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.addValue("Bearer \(openAIKey)", forHTTPHeaderField: "Authorization")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            
+
             let prompt = """
             Eres el motor de lógica de 'Infinite Craft'. Tu misión es fusionar conceptos para crear uno nuevo.
-            
+
             REGLAS ESTRICTAS:
             1. PROHIBIDO nombres compuestos con "de", "con" o "y".
             2. El resultado debe ser un SUSTANTIVO ÚNICO (Ej: Coche + Electricidad = Tesla).
             3. Responde SOLO JSON: {"name": "Nombre", "emoji": "emoji", "colorHex": "#HEX"}
-            
+
             Combinación: '\(item1)' + '\(item2)'
             """
-            
+
             let body: [String: Any] = [
                 "model": "gpt-4o-mini",
                 "messages": [
@@ -106,14 +113,16 @@ struct RecipeService {
                 "temperature": 0.3,
                 "response_format": ["type": "json_object"]
             ]
-            
+
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-            
+
             do {
                 let (data, _) = try await URLSession.shared.data(for: request)
                 let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                if let content = response.choices.first?.message.content {
-                    return try JSONDecoder().decode(CombinationResult.self, from: content.data(using: .utf8)!)
+                if let content = response.choices.first?.message.content,
+                   let contentData = content.data(using: .utf8) {
+                    let ai = try JSONDecoder().decode(AIResult.self, from: contentData)
+                    return CombinationResult(name: ai.name, emoji: ai.emoji, colorHex: ai.colorHex)
                 }
             } catch {
                 print("❌ Error OpenAI: \(error)")
