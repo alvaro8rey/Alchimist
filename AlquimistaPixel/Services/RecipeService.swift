@@ -19,7 +19,12 @@ struct RecipeService {
         let name: String
         let emoji: String
         let colorHex: String
-        var isFirstDiscovery: Bool = false // Propiedad para el aviso visual
+        var isFirstDiscovery: Bool = false
+        var creatorName: String = ""
+    }
+
+    private var username: String {
+        UserDefaults.standard.string(forKey: UserService.usernameKey) ?? "Desconocido"
     }
 
     private func makeGlobalKey(_ item1: String, _ item2: String) -> String {
@@ -43,7 +48,8 @@ struct RecipeService {
                     name: data["name"] as? String ?? "",
                     emoji: data["emoji"] as? String ?? "",
                     colorHex: data["color"] as? String ?? "#FFFFFF",
-                    isFirstDiscovery: false
+                    isFirstDiscovery: false,
+                    creatorName: data["creatorName"] as? String ?? ""
                 )
             }
         } catch {
@@ -57,15 +63,16 @@ struct RecipeService {
         }
         
         // C. Guardar el nuevo descubrimiento GLOBAL
-        // Al ser nuevo, marcamos isFirstDiscovery como true
         aiResult.isFirstDiscovery = true
-        
+        aiResult.creatorName = username
+
         do {
             try await db.collection("recipes").document(key).setData([
                 "name": aiResult.name,
                 "emoji": aiResult.emoji,
                 "color": aiResult.colorHex,
-                "createdBy": userId, // Guardamos quién lo descubrió primero
+                "createdBy": userId,
+                "creatorName": username,
                 "createdAt": FieldValue.serverTimestamp()
             ])
             print("🚀 ¡ERES EL PRIMERO! Nuevo descubrimiento guardado: \(aiResult.name)")

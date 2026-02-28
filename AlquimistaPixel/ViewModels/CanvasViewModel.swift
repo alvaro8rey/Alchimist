@@ -1,6 +1,18 @@
 import Combine
 import SwiftUI
 
+// MARK: - Combination History Entry
+struct CombinationEntry: Identifiable {
+    let id = UUID()
+    let input1: String
+    let emoji1: String
+    let input2: String
+    let emoji2: String
+    let result: String
+    let resultEmoji: String
+    let resultColorHex: String
+}
+
 class CanvasViewModel: ObservableObject {
     @Published var activeElements: [ActiveElement] = []
     @Published var canvasOffset: CGSize = .zero
@@ -11,9 +23,11 @@ class CanvasViewModel: ObservableObject {
     @Published var highlightedElementID: UUID? = nil
     @Published var firstDiscoveryName: String? = nil
     @Published var combiningPosition: CGPoint? = nil
-    
+    @Published var combinationHistory: [CombinationEntry] = []
+
     private let recipeService = RecipeService()
     var onNewDiscovery: ((String, String, String) -> Void)?
+    private var cancellables = Set<AnyCancellable>()
 
     private var shownFirstDiscoveries: Set<String> {
         get { Set(UserDefaults.standard.stringArray(forKey: "shownFirstDiscoveries") ?? []) }
@@ -26,14 +40,53 @@ class CanvasViewModel: ObservableObject {
         UserDefaults.standard.set(id, forKey: "userId")
         return id
     }
-    
+
     init(screenSize: CGSize = .zero) {
-        spawnInitialElements()
+        if let saved = Self.loadCanvas(), !saved.isEmpty {
+            activeElements = saved
+        } else {
+            spawnInitialElements()
+        }
         if screenSize != .zero {
             resetCamera(screenSize: screenSize)
         }
+        setupAutoSave()
     }
-    
+
+    // MARK: - Canvas Persistence
+
+    private func setupAutoSave() {
+        $activeElements
+            .combineLatest($combiningPosition)
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .filter { _, combining in combining == nil }
+            .map { elements, _ in elements }
+            .sink { elements in
+                Self.saveCanvas(elements)
+            }
+            .store(in: &cancellables)
+    }
+
+    private static func saveCanvas(_ elements: [ActiveElement]) {
+        guard let data = try? JSONEncoder().encode(elements) else { return }
+        UserDefaults.standard.set(data, forKey: "canvasState")
+    }
+
+    private static func loadCanvas() -> [ActiveElement]? {
+        guard let data = UserDefaults.standard.data(forKey: "canvasState"),
+              let elements = try? JSONDecoder().decode([ActiveElement].self, from: data) else { return nil }
+        return elements
+    }
+
+    func clearCanvas() {
+        withAnimation(.spring()) {
+            activeElements.removeAll()
+        }
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+    }
+
+    // MARK: - Initial Elements
+
     private func spawnInitialElements() {
         activeElements = [
             ActiveElement(id: UUID(), name: "Fuego", emoji: "🔥", colorHex: "#FF5722", position: CGPoint(x: -120, y: -100)),
@@ -42,7 +95,7 @@ class CanvasViewModel: ObservableObject {
             ActiveElement(id: UUID(), name: "Aire", emoji: "💨", colorHex: "#E0E0E0", position: CGPoint(x: 120, y: 100))
         ]
     }
-    
+
     // MARK: - Duplicado
     func duplicateElement(_ element: ActiveElement) {
         let offset: CGFloat = 30
@@ -53,13 +106,12 @@ class CanvasViewModel: ObservableObject {
             colorHex: element.colorHex,
             position: CGPoint(x: element.position.x + offset, y: element.position.y + offset)
         )
-        
         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             activeElements.append(clone)
         }
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
-    
+
     // MARK: - Camera Controls
     func zoomIn() {
         if scale >= 4.0 { UIImpactFeedbackGenerator(style: .rigid).impactOccurred(); return }
@@ -85,12 +137,11 @@ class CanvasViewModel: ObservableObject {
         let new = ActiveElement(id: UUID(), name: discovered.name, emoji: discovered.emoji, colorHex: discovered.colorHex, position: worldPos)
         activeElements.append(new)
     }
-    
+
     func updatePosition(for id: UUID, to newPos: CGPoint) {
         if let i = activeElements.firstIndex(where: { $0.id == id }) {
             activeElements[i].position = newPos
         }
-        // Resaltar el elemento más cercano si está dentro del rango de combinación
         var minDist: CGFloat = .infinity
         var closestID: UUID? = nil
         for other in activeElements where other.id != id {
@@ -105,24 +156,20 @@ class CanvasViewModel: ObservableObject {
             resetDragState()
             return
         }
-        
-        // screenPos(P) = P * scale + screenCenter + canvasOffset
+
         let screenX = element.position.x * scale + screenSize.width / 2 + canvasOffset.width
         let screenY = element.position.y * scale + screenSize.height / 2 + canvasOffset.height
-        
-        // Área de la papelera corregida
         let trashRect = CGRect(x: 0, y: screenSize.height - 230, width: 120, height: 120)
-        
+
         if trashRect.contains(CGPoint(x: screenX, y: screenY)) {
             deleteElement(id)
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         } else {
             checkCombinations(for: element)
         }
-        
         resetDragState()
     }
-    
+
     private func resetDragState() {
         withAnimation(.spring()) {
             showTrashBin = false
@@ -131,32 +178,29 @@ class CanvasViewModel: ObservableObject {
             highlightedElementID = nil
         }
     }
-    
+
     private func checkCombinations(for element: ActiveElement) {
         var closest: ActiveElement?
         var minDist: CGFloat = .infinity
-        
+
         for other in activeElements where other.id != element.id {
             let d = hypot(element.position.x - other.position.x, element.position.y - other.position.y)
-            if d < minDist {
-                minDist = d
-                closest = other
-            }
+            if d < minDist { minDist = d; closest = other }
         }
-        
+
         if let closest, minDist < 65 {
             combineElements(id1: element.id, id2: closest.id)
         }
     }
-    
+
     private func combineElements(id1: UUID, id2: UUID) {
         guard let e1 = activeElements.first(where: { $0.id == id1 }),
               let e2 = activeElements.first(where: { $0.id == id2 }) else { return }
-        
+
         let mid = CGPoint(x: (e1.position.x + e2.position.x)/2, y: (e1.position.y + e2.position.y)/2)
         let backupE1 = e1
         let backupE2 = e2
-        
+
         activeElements.removeAll { $0.id == id1 || $0.id == id2 }
         combiningPosition = mid
 
@@ -168,6 +212,17 @@ class CanvasViewModel: ObservableObject {
                     activeElements.append(new)
                     self.onNewDiscovery?(result.name, result.emoji, result.colorHex)
                     UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+
+                    // Añadir al historial
+                    let entry = CombinationEntry(
+                        input1: e1.name, emoji1: e1.emoji,
+                        input2: e2.name, emoji2: e2.emoji,
+                        result: result.name, resultEmoji: result.emoji,
+                        resultColorHex: result.colorHex
+                    )
+                    combinationHistory.insert(entry, at: 0)
+                    if combinationHistory.count > 30 { combinationHistory.removeLast() }
+
                     let key = result.name.lowercased()
                     if result.isFirstDiscovery && !self.shownFirstDiscoveries.contains(key) {
                         var seen = self.shownFirstDiscoveries
@@ -190,11 +245,11 @@ class CanvasViewModel: ObservableObject {
             }
         }
     }
-    
+
     func deleteElement(_ id: UUID) {
         activeElements.removeAll { $0.id == id }
     }
-    
+
     func resetCamera(screenSize: CGSize) {
         withAnimation(.spring()) {
             scale = 1.0

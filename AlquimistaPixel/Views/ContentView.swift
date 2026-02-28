@@ -8,6 +8,7 @@ struct ContentView: View {
     @StateObject private var vm = CanvasViewModel()
     @State private var screenSize: CGSize = .zero
     @State private var lastAddedElementName: String? = nil
+    @State private var showOnboarding: Bool = !UserService().hasUsername
     
     var body: some View {
         GeometryReader { geo in
@@ -90,6 +91,14 @@ struct ContentView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView { name in
+                Task {
+                    await UserService().save(username: name)
+                    await MainActor.run { showOnboarding = false }
+                }
+            }
+        }
     }
     
     private func ensureBasicElements() {

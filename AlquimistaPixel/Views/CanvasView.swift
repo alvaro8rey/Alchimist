@@ -4,6 +4,8 @@ struct CanvasView: View {
     @ObservedObject var vm: CanvasViewModel
     @Binding var screenSize: CGSize
     @GestureState private var dragTranslation: CGSize = .zero
+    @State private var showHistory = false
+    @State private var showClearAlert = false
 
     var currentOffset: CGSize {
         CGSize(
@@ -136,6 +138,16 @@ struct CanvasView: View {
         }
         .ignoresSafeArea()
         .overlay(alignment: .top) { header }
+        .sheet(isPresented: $showHistory) {
+            CombinationHistoryView(history: vm.combinationHistory)
+                .preferredColorScheme(.dark)
+        }
+        .alert("Limpiar canvas", isPresented: $showClearAlert) {
+            Button("Cancelar", role: .cancel) {}
+            Button("Limpiar", role: .destructive) { vm.clearCanvas() }
+        } message: {
+            Text("Se eliminarán todos los elementos del canvas. Tu inventario no cambiará.")
+        }
     }
 
     private var header: some View {
@@ -147,6 +159,12 @@ struct CanvasView: View {
             Spacer()
 
             HStack(spacing: 8) {
+                if !vm.combinationHistory.isEmpty {
+                    zoomButton(icon: "clock.arrow.circlepath") { showHistory = true }
+                }
+                if !vm.activeElements.isEmpty {
+                    zoomButton(icon: "trash") { showClearAlert = true }
+                }
                 zoomButton(icon: "minus", action: vm.zoomOut)
                 zoomButton(icon: "plus", action: vm.zoomIn)
                 zoomButton(icon: "scope", action: { vm.resetCamera(screenSize: screenSize) })
