@@ -1,0 +1,643 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3875896B2F52234100669CF0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3875896A2F52234100669CF0 /* FirebaseAnalytics */; };
+		3875896D2F52234100669CF0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3875896C2F52234100669CF0 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		38ED77052F51F05200B87E15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38ED76EF2F51F05000B87E15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 38ED76F62F51F05000B87E15;
+			remoteInfo = AlquimistaPixel;
+		};
+		38ED770F2F51F05200B87E15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38ED76EF2F51F05000B87E15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 38ED76F62F51F05000B87E15;
+			remoteInfo = AlquimistaPixel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		38ED76F72F51F05000B87E15 /* AlquimistaPixel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlquimistaPixel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		38ED77042F51F05200B87E15 /* AlquimistaPixelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlquimistaPixelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		38ED770E2F51F05200B87E15 /* AlquimistaPixelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlquimistaPixelUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		387589712F52486E00669CF0 /* Exceptions for "AlquimistaPixel" folder in "AlquimistaPixel" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Utils/Color+Hex.swift",
+			);
+			target = 38ED76F62F51F05000B87E15 /* AlquimistaPixel */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		387589722F52486E00669CF0 /* Exceptions for "AlquimistaPixel" folder in "Copy Bundle Resources" phase from "AlquimistaPixel" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 38ED76F52F51F05000B87E15 /* Resources */;
+			membershipExceptions = (
+				"Utils/Color+Hex.swift",
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		38ED76F92F51F05000B87E15 /* AlquimistaPixel */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				387589712F52486E00669CF0 /* Exceptions for "AlquimistaPixel" folder in "AlquimistaPixel" target */,
+				387589722F52486E00669CF0 /* Exceptions for "AlquimistaPixel" folder in "Copy Bundle Resources" phase from "AlquimistaPixel" target */,
+			);
+			path = AlquimistaPixel;
+			sourceTree = "<group>";
+		};
+		38ED77072F51F05200B87E15 /* AlquimistaPixelTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AlquimistaPixelTests;
+			sourceTree = "<group>";
+		};
+		38ED77112F51F05200B87E15 /* AlquimistaPixelUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AlquimistaPixelUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		38ED76F42F51F05000B87E15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3875896B2F52234100669CF0 /* FirebaseAnalytics in Frameworks */,
+				3875896D2F52234100669CF0 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38ED77012F51F05200B87E15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38ED770B2F51F05200B87E15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		38ED76EE2F51F05000B87E15 = {
+			isa = PBXGroup;
+			children = (
+				38ED76F92F51F05000B87E15 /* AlquimistaPixel */,
+				38ED77072F51F05200B87E15 /* AlquimistaPixelTests */,
+				38ED77112F51F05200B87E15 /* AlquimistaPixelUITests */,
+				38ED76F82F51F05000B87E15 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		38ED76F82F51F05000B87E15 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38ED76F72F51F05000B87E15 /* AlquimistaPixel.app */,
+				38ED77042F51F05200B87E15 /* AlquimistaPixelTests.xctest */,
+				38ED770E2F51F05200B87E15 /* AlquimistaPixelUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		38ED76F62F51F05000B87E15 /* AlquimistaPixel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 38ED77182F51F05200B87E15 /* Build configuration list for PBXNativeTarget "AlquimistaPixel" */;
+			buildPhases = (
+				38ED76F32F51F05000B87E15 /* Sources */,
+				38ED76F42F51F05000B87E15 /* Frameworks */,
+				38ED76F52F51F05000B87E15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				38ED76F92F51F05000B87E15 /* AlquimistaPixel */,
+			);
+			name = AlquimistaPixel;
+			packageProductDependencies = (
+				3875896A2F52234100669CF0 /* FirebaseAnalytics */,
+				3875896C2F52234100669CF0 /* FirebaseFirestore */,
+			);
+			productName = AlquimistaPixel;
+			productReference = 38ED76F72F51F05000B87E15 /* AlquimistaPixel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		38ED77032F51F05200B87E15 /* AlquimistaPixelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 38ED771B2F51F05200B87E15 /* Build configuration list for PBXNativeTarget "AlquimistaPixelTests" */;
+			buildPhases = (
+				38ED77002F51F05200B87E15 /* Sources */,
+				38ED77012F51F05200B87E15 /* Frameworks */,
+				38ED77022F51F05200B87E15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				38ED77062F51F05200B87E15 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				38ED77072F51F05200B87E15 /* AlquimistaPixelTests */,
+			);
+			name = AlquimistaPixelTests;
+			packageProductDependencies = (
+			);
+			productName = AlquimistaPixelTests;
+			productReference = 38ED77042F51F05200B87E15 /* AlquimistaPixelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		38ED770D2F51F05200B87E15 /* AlquimistaPixelUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 38ED771E2F51F05200B87E15 /* Build configuration list for PBXNativeTarget "AlquimistaPixelUITests" */;
+			buildPhases = (
+				38ED770A2F51F05200B87E15 /* Sources */,
+				38ED770B2F51F05200B87E15 /* Frameworks */,
+				38ED770C2F51F05200B87E15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				38ED77102F51F05200B87E15 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				38ED77112F51F05200B87E15 /* AlquimistaPixelUITests */,
+			);
+			name = AlquimistaPixelUITests;
+			packageProductDependencies = (
+			);
+			productName = AlquimistaPixelUITests;
+			productReference = 38ED770E2F51F05200B87E15 /* AlquimistaPixelUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		38ED76EF2F51F05000B87E15 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					38ED76F62F51F05000B87E15 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					38ED77032F51F05200B87E15 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 38ED76F62F51F05000B87E15;
+					};
+					38ED770D2F51F05200B87E15 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 38ED76F62F51F05000B87E15;
+					};
+				};
+			};
+			buildConfigurationList = 38ED76F22F51F05000B87E15 /* Build configuration list for PBXProject "AlquimistaPixel" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 38ED76EE2F51F05000B87E15;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				387589692F52234100669CF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 38ED76F82F51F05000B87E15 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				38ED76F62F51F05000B87E15 /* AlquimistaPixel */,
+				38ED77032F51F05200B87E15 /* AlquimistaPixelTests */,
+				38ED770D2F51F05200B87E15 /* AlquimistaPixelUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		38ED76F52F51F05000B87E15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38ED77022F51F05200B87E15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38ED770C2F51F05200B87E15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		38ED76F32F51F05000B87E15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38ED77002F51F05200B87E15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38ED770A2F51F05200B87E15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		38ED77062F51F05200B87E15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 38ED76F62F51F05000B87E15 /* AlquimistaPixel */;
+			targetProxy = 38ED77052F51F05200B87E15 /* PBXContainerItemProxy */;
+		};
+		38ED77102F51F05200B87E15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 38ED76F62F51F05000B87E15 /* AlquimistaPixel */;
+			targetProxy = 38ED770F2F51F05200B87E15 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		38ED77162F51F05200B87E15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		38ED77172F51F05200B87E15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		38ED77192F51F05200B87E15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ARG.AlquimistaPixel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		38ED771A2F51F05200B87E15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ARG.AlquimistaPixel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		38ED771C2F51F05200B87E15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ARG.AlquimistaPixelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlquimistaPixel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AlquimistaPixel";
+			};
+			name = Debug;
+		};
+		38ED771D2F51F05200B87E15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ARG.AlquimistaPixelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlquimistaPixel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AlquimistaPixel";
+			};
+			name = Release;
+		};
+		38ED771F2F51F05200B87E15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ARG.AlquimistaPixelUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AlquimistaPixel;
+			};
+			name = Debug;
+		};
+		38ED77202F51F05200B87E15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99B6P28FRP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ARG.AlquimistaPixelUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AlquimistaPixel;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		38ED76F22F51F05000B87E15 /* Build configuration list for PBXProject "AlquimistaPixel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38ED77162F51F05200B87E15 /* Debug */,
+				38ED77172F51F05200B87E15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		38ED77182F51F05200B87E15 /* Build configuration list for PBXNativeTarget "AlquimistaPixel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38ED77192F51F05200B87E15 /* Debug */,
+				38ED771A2F51F05200B87E15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		38ED771B2F51F05200B87E15 /* Build configuration list for PBXNativeTarget "AlquimistaPixelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38ED771C2F51F05200B87E15 /* Debug */,
+				38ED771D2F51F05200B87E15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		38ED771E2F51F05200B87E15 /* Build configuration list for PBXNativeTarget "AlquimistaPixelUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38ED771F2F51F05200B87E15 /* Debug */,
+				38ED77202F51F05200B87E15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		387589692F52234100669CF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3875896A2F52234100669CF0 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 387589692F52234100669CF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		3875896C2F52234100669CF0 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 387589692F52234100669CF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 38ED76EF2F51F05000B87E15 /* Project object */;
+}
