@@ -35,6 +35,11 @@ final class SoundManager {
 
     // MARK: - Public
 
+    var isEnabled: Bool {
+        get { UserDefaults.standard.object(forKey: "soundEnabled") as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: "soundEnabled") }
+    }
+
     func playPop()    { play(popNode,    buffer: popBuffer) }
     func playChime()  { play(chimeNode,  buffer: chimeBuffer) }
     func playSwoosh() { play(swooshNode, buffer: swooshBuffer) }
@@ -42,7 +47,7 @@ final class SoundManager {
     // MARK: - Playback
 
     private func play(_ node: AVAudioPlayerNode, buffer: AVAudioPCMBuffer?) {
-        guard let buffer else { return }
+        guard isEnabled, let buffer else { return }
         node.stop()
         node.scheduleBuffer(buffer)
         node.play()

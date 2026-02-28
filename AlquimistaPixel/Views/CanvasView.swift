@@ -9,6 +9,7 @@ struct CanvasView: View {
     @State private var showProfile = false
     @State private var showLeaderboard = false
     @State private var showFeed = false
+    @AppStorage("soundEnabled") private var soundEnabled = true
 
     var currentOffset: CGSize {
         CGSize(
@@ -194,6 +195,16 @@ struct CanvasView: View {
                         Button { showHistory = true } label: {
                             Label("Historial", systemImage: "clock.arrow.circlepath")
                         }
+                    }
+                    Divider()
+                    Button {
+                        soundEnabled.toggle()
+                        SoundManager.shared.isEnabled = soundEnabled
+                    } label: {
+                        Label(
+                            soundEnabled ? "Silenciar sonidos" : "Activar sonidos",
+                            systemImage: soundEnabled ? "speaker.slash" : "speaker.wave.2"
+                        )
                     }
                     if !vm.activeElements.isEmpty {
                         Divider()
