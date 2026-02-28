@@ -57,13 +57,19 @@ class CanvasViewModel: ObservableObject {
     // MARK: - Camera Controls
     func zoomIn() {
         withAnimation(.spring(response: 0.3)) {
-            scale = min(4.0, scale + 0.25)
+            let newScale = min(4.0, scale + 0.25)
+            let ratio = newScale / scale
+            canvasOffset = CGSize(width: canvasOffset.width * ratio, height: canvasOffset.height * ratio)
+            scale = newScale
         }
     }
-    
+
     func zoomOut() {
         withAnimation(.spring(response: 0.3)) {
-            scale = max(0.2, scale - 0.25)
+            let newScale = max(0.2, scale - 0.25)
+            let ratio = newScale / scale
+            canvasOffset = CGSize(width: canvasOffset.width * ratio, height: canvasOffset.height * ratio)
+            scale = newScale
         }
     }
 
@@ -88,12 +94,13 @@ class CanvasViewModel: ObservableObject {
 
     func commitPinch(_ delta: CGFloat, screenSize: CGSize) {
         let newScale = min(4.0, max(0.2, scale * delta))
-        let cx = screenSize.width / 2
-        let cy = screenSize.height / 2
-        // Ajusta el offset para que el punto bajo el centro de pantalla no se desplace
+        let ratio = newScale / scale
+        // El ZStack ya está centrado en pantalla por SwiftUI, así que el offset
+        // solo desplaza desde ese centro. Para mantener el punto bajo el centro
+        // fijo durante el zoom, basta con escalar el offset por el mismo ratio.
         canvasOffset = CGSize(
-            width:  cx - (cx - canvasOffset.width)  * (newScale / scale),
-            height: cy - (cy - canvasOffset.height) * (newScale / scale)
+            width:  canvasOffset.width  * ratio,
+            height: canvasOffset.height * ratio
         )
         scale = newScale
     }
@@ -104,9 +111,9 @@ class CanvasViewModel: ObservableObject {
             return
         }
         
-        // scaleEffect ancla en el centro de la pantalla, hay que compensar ese desplazamiento
-        let screenX = (element.position.x - screenSize.width / 2) * scale + screenSize.width / 2 + canvasOffset.width
-        let screenY = (element.position.y - screenSize.height / 2) * scale + screenSize.height / 2 + canvasOffset.height
+        // screenPos(P) = P * scale + screenCenter + canvasOffset
+        let screenX = element.position.x * scale + screenSize.width / 2 + canvasOffset.width
+        let screenY = element.position.y * scale + screenSize.height / 2 + canvasOffset.height
         
         // Área de la papelera corregida
         let trashRect = CGRect(x: 0, y: screenSize.height - 230, width: 120, height: 120)
@@ -188,7 +195,7 @@ class CanvasViewModel: ObservableObject {
     func resetCamera(screenSize: CGSize) {
         withAnimation(.spring()) {
             scale = 1.0
-            canvasOffset = CGSize(width: screenSize.width/2, height: screenSize.height/2)
+            canvasOffset = .zero
         }
     }
 }

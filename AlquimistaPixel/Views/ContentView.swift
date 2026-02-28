@@ -19,8 +19,9 @@ struct ContentView: View {
                         let centerScreenX = screenSize.width / 2
                         let centerScreenY = screenSize.height / 2 - 80
 
-                        let worldX = (centerScreenX - vm.canvasOffset.width) / vm.scale
-                        let worldY = (centerScreenY - vm.canvasOffset.height) / vm.scale
+                        // Inversa de: screenPos(P) = P * scale + screenCenter + canvasOffset
+                        let worldX = (centerScreenX - screenSize.width / 2 - vm.canvasOffset.width) / vm.scale
+                        let worldY = (centerScreenY - screenSize.height / 2 - vm.canvasOffset.height) / vm.scale
 
                         vm.spawnElement(from: element, at: CGPoint(x: worldX, y: worldY))
                     }
