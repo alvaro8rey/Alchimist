@@ -71,6 +71,10 @@ struct ContentView: View {
                         let new = DiscoveredElement(name: name, emoji: emoji, colorHex: hex)
                         modelContext.insert(new)
                         lastAddedElementName = name
+                        Task {
+                            try? await Task.sleep(nanoseconds: 50_000_000)
+                            await MainActor.run { lastAddedElementName = nil }
+                        }
 
                         do {
                             try modelContext.save()

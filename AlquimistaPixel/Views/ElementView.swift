@@ -13,6 +13,10 @@ struct ElementView: View {
             Text(element.name)
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(.white)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 90)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

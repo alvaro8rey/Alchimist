@@ -10,6 +10,7 @@ class CanvasViewModel: ObservableObject {
     @Published var dragStartWorldPosition: CGPoint? = nil
     @Published var highlightedElementID: UUID? = nil
     @Published var firstDiscoveryName: String? = nil
+    @Published var combiningPosition: CGPoint? = nil
     
     private let recipeService = RecipeService()
     var onNewDiscovery: ((String, String, String) -> Void)?
@@ -61,6 +62,7 @@ class CanvasViewModel: ObservableObject {
     
     // MARK: - Camera Controls
     func zoomIn() {
+        if scale >= 4.0 { UIImpactFeedbackGenerator(style: .rigid).impactOccurred(); return }
         withAnimation(.spring(response: 0.3)) {
             let newScale = min(4.0, scale + 0.25)
             let ratio = newScale / scale
@@ -70,6 +72,7 @@ class CanvasViewModel: ObservableObject {
     }
 
     func zoomOut() {
+        if scale <= 0.2 { UIImpactFeedbackGenerator(style: .rigid).impactOccurred(); return }
         withAnimation(.spring(response: 0.3)) {
             let newScale = max(0.2, scale - 0.25)
             let ratio = newScale / scale
@@ -155,10 +158,12 @@ class CanvasViewModel: ObservableObject {
         let backupE2 = e2
         
         activeElements.removeAll { $0.id == id1 || $0.id == id2 }
-        
+        combiningPosition = mid
+
         Task {
             if let result = await recipeService.getCombination(e1.name, e2.name, userId: userId) {
                 await MainActor.run {
+                    self.combiningPosition = nil
                     let new = ActiveElement(id: UUID(), name: result.name, emoji: result.emoji, colorHex: result.colorHex, position: mid)
                     activeElements.append(new)
                     self.onNewDiscovery?(result.name, result.emoji, result.colorHex)
@@ -177,6 +182,8 @@ class CanvasViewModel: ObservableObject {
                 }
             } else {
                 await MainActor.run {
+                    self.combiningPosition = nil
+                    UINotificationFeedbackGenerator().notificationOccurred(.error)
                     activeElements.append(backupE1)
                     activeElements.append(backupE2)
                 }

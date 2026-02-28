@@ -63,6 +63,7 @@ struct CanvasView: View {
                             DragGesture(coordinateSpace: .global)
                                 .onChanged { value in
                                     if vm.draggingElementID == nil {
+                                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                         vm.draggingElementID = element.id
                                         vm.dragStartWorldPosition = element.position
                                     }
@@ -78,7 +79,34 @@ struct CanvasView: View {
                         )
                         .zIndex(vm.draggingElementID == element.id ? 100 : 0)
                     }
+
+                    // Spinner de carga mientras la IA genera la combinación
+                    if let pos = vm.combiningPosition {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .tint(.white)
+                            .scaleEffect(1.3)
+                            .position(
+                                x: screenX(pos.x, width: geo.size.width),
+                                y: screenY(pos.y, height: geo.size.height)
+                            )
+                            .transition(.opacity)
+                    }
+
+                    // Estado vacío
+                    if vm.activeElements.isEmpty && vm.combiningPosition == nil {
+                        VStack(spacing: 8) {
+                            Text("Toca un elemento del inventario para añadirlo")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.4))
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: 240)
+                        .position(x: geo.size.width / 2, y: geo.size.height / 2 - 60)
+                        .transition(.opacity)
+                    }
                 }
+                .animation(.easeInOut(duration: 0.25), value: vm.combiningPosition == nil)
                 .frame(width: geo.size.width, height: geo.size.height)
 
                 // PAPELERA
