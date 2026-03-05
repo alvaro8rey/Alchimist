@@ -1,5 +1,8 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 import OpenAI from "openai";
+
+admin.initializeApp();
 
 // The API key is stored securely in Firebase Functions config, never in the client app.
 // Set it once with: firebase functions:secrets:set OPENAI_API_KEY
@@ -33,10 +36,11 @@ export const generateRecipe = functions
     // Optional: require authenticated users only
     // if (!context.auth) throw new functions.https.HttpsError("unauthenticated", "Login required");
 
-    const { ingredient1, ingredient2, userId } = data as {
+    const { ingredient1, ingredient2, userId, username } = data as {
       ingredient1: string;
       ingredient2: string;
       userId: string;
+      username: string;
     };
 
     if (!ingredient1 || !ingredient2) {
@@ -89,7 +93,48 @@ Reglas:
         throw new Error("Invalid response shape from OpenAI");
       }
 
-      return parsed;
+      // Save to Firestore (admin SDK bypasses security rules)
+      const db = admin.firestore();
+      const key = [ingredient1, ingredient2]
+        .map((s) => s.toLowerCase().trim())
+        .sort()
+        .join("_");
+      const recipeRef = db.collection("recipes").doc(key);
+      const existing = await recipeRef.get();
+
+      if (existing.exists) {
+        // Already saved by a concurrent request — return existing data
+        const d = existing.data()!;
+        return {
+          name: d.name as string,
+          emoji: d.emoji as string,
+          colorHex: d.color as string,
+          isFirstDiscovery: false,
+          creatorName: (d.creatorName as string) ?? "",
+        };
+      }
+
+      const creatorName = username ?? "";
+      await recipeRef.set({
+        name: parsed.name,
+        emoji: parsed.emoji,
+        color: parsed.colorHex,
+        createdBy: userId ?? "anonymous",
+        creatorName,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      if (userId) {
+        await db
+          .collection("users")
+          .doc(userId)
+          .set(
+            { discoveryCount: admin.firestore.FieldValue.increment(1), username: creatorName },
+            { merge: true }
+          );
+      }
+
+      return { ...parsed, isFirstDiscovery: true, creatorName };
     } catch (err) {
       throw new functions.https.HttpsError(
         "internal",

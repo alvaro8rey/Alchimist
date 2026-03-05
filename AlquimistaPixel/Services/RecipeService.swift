@@ -88,8 +88,7 @@ struct RecipeService {
             }
 
             if let bundled = checkBundle(key) {
-                print("📦 Receta en bundle. Subiendo a Firebase...")
-                saveToFirebase(key: key, result: bundled, userId: userId, isFirstDiscovery: false)
+                print("📦 Receta en bundle.")
                 return bundled
             }
 
@@ -103,55 +102,20 @@ struct RecipeService {
         }
 
         print("🤖 No está en Firebase ni en bundle. Generando con IA...")
-        guard var aiResult = await fetchFromCloudFunction(item1: item1, item2: item2, userId: userId) else { return nil }
-
-        aiResult.isFirstDiscovery = true
-        aiResult.creatorName = username
-        saveToFirebase(key: key, result: aiResult, userId: userId, isFirstDiscovery: true)
-        return aiResult
+        return await fetchFromCloudFunction(item1: item1, item2: item2, userId: userId)
     }
 
-    private func saveToFirebase(key: String, result: CombinationResult, userId: String, isFirstDiscovery: Bool) {
-        Task {
-            do {
-                try await db.collection("recipes").document(key).setData([
-                    "name": result.name,
-                    "emoji": result.emoji,
-                    "color": result.colorHex,
-                    "createdBy": userId,
-                    "creatorName": result.creatorName,
-                    "createdAt": FieldValue.serverTimestamp()
-                ])
-                if isFirstDiscovery {
-                    print("🚀 ¡ERES EL PRIMERO! Nuevo descubrimiento guardado: \(result.name)")
-                    let currentUsername = UserDefaults.standard.string(forKey: UserService.usernameKey) ?? ""
-                    if !userId.isEmpty && !currentUsername.isEmpty {
-                        try? await db.collection("users").document(userId).setData([
-                            "discoveryCount": FieldValue.increment(Int64(1)),
-                            "username": currentUsername
-                        ], merge: true)
-                    }
-                }
-            } catch {
-                print("❌ Error al guardar en Firebase: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    private struct AIResult: Codable {
-        let name: String
-        let emoji: String
-        let colorHex: String
-    }
 
     /// Llama a la Cloud Function `generateRecipe` — la API key de OpenAI nunca sale del servidor.
+    /// La Cloud Function también guarda en Firestore y devuelve isFirstDiscovery.
     private func fetchFromCloudFunction(item1: String, item2: String, userId: String) async -> CombinationResult? {
         let callable = functions.httpsCallable("generateRecipe")
         do {
             let result = try await callable.call([
                 "ingredient1": item1,
                 "ingredient2": item2,
-                "userId": userId
+                "userId": userId,
+                "username": username
             ])
             guard let data = result.data as? [String: Any],
                   let name = data["name"] as? String,
@@ -160,7 +124,10 @@ struct RecipeService {
                 print("❌ Respuesta inesperada de Cloud Function")
                 return nil
             }
-            return CombinationResult(name: name, emoji: emoji, colorHex: colorHex)
+            let isFirst = data["isFirstDiscovery"] as? Bool ?? false
+            let creator = data["creatorName"] as? String ?? ""
+            return CombinationResult(name: name, emoji: emoji, colorHex: colorHex,
+                                     isFirstDiscovery: isFirst, creatorName: creator)
         } catch {
             print("❌ Error en Cloud Function: \(error)")
             return nil
